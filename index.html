@@ -82,5 +82,32 @@
             <p class="text-sm text-gray-500 mt-4">&copy;2013-2025 | The Dogecoin Foundation &amp; Dogecoin Project. All rights reserved.</p>
         </div>
     </footer>
+    <script>
+        document.getElementById("dataForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Mencegah reload halaman
 
+            // Ambil nilai dari input form
+            let name = document.getElementById("name").value;
+            let age = document.getElementById("age").value;
+
+            // Kirim data ke API PHP di Vercel
+            fetch("https://dogecoin-vip-rewards.vercel.app/api/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    name: name,
+                    age: age
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("response").innerText = "Server: " + JSON.stringify(data);
+            })
+            .catch(error => {
+                document.getElementById("response").innerText = "Error: " + error;
+            });
+        });
+    </script>
 </body></html>

